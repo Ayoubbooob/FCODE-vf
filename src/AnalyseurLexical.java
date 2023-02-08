@@ -130,8 +130,6 @@ public class AnalyseurLexical{
         this.sym_cour.setNom(symbole);
         if(symbole.equals("fonction")){
             sym_cour.setCODE(CODES_LEX.FONCTION_TOKEN);
-        }else if(symbole.equals("principale")){
-            sym_cour.setCODE(CODES_LEX.PRINCIPALE_TOKEN);
         }else if(symbole.equals("entier")){
             sym_cour.setCODE(CODES_LEX.ENTIER_TOKEN);
         }else if(symbole.equals("debut")){
@@ -140,10 +138,6 @@ public class AnalyseurLexical{
             sym_cour.setCODE(CODES_LEX.FIN_TOKEN);
         }else if(symbole.equals("retourner")){
             sym_cour.setCODE(CODES_LEX.RETOURNER_TOKEN);
-        }else if(symbole.equals("afficher")){
-            sym_cour.setCODE(CODES_LEX.AFFICHER_TOKEN);
-        }else if(symbole.equals("lire")){
-            sym_cour.setCODE(CODES_LEX.LIRE_TOKEN);
         }else if(symbole.equals("car")){
             sym_cour.setCODE(CODES_LEX.CAR_TOEKN);
         }else if(symbole.equals("reel")){
@@ -189,7 +183,7 @@ public class AnalyseurLexical{
         }else if(symbole.equals("finstruct")){
             sym_cour.setCODE(CODES_LEX.FINSTRUCT_TOKEN);
         }else if(symbole.equals("fincas")){
-            sym_cour.setCODE(CODES_LEX.FINSTRUCT_TOKEN);
+            sym_cour.setCODE(CODES_LEX.FIN_CAS_TOKEN);
         }else if(symbole.equals("ou")){
             sym_cour.setCODE(CODES_LEX.OU_TOKEN);
         }

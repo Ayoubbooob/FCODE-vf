@@ -15,7 +15,7 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
     }
     void analyseurLexical() throws Exception{
 //     File file = new File("C:\\Users\\Dell\\Desktop\\code\\code.fc");
-        File file = new File("C:\\Users\\AyouByte\\Desktop\\projet compila\\last dial last\\fcode2.fc");
+        File file = new File("C:\\Users\\AyouByte\\Desktop\\projet compila\\last dial last\\FCODE-cloned\\fcode.fc");
 
         FileReader fr = new FileReader(file);
      BufferedReader bf = new BufferedReader(fr);
@@ -35,7 +35,9 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
      this.listLexical = new ArrayList<>();
      while (al.getCour()<charList.size()-1){
       TSym_Cour sym_cour = al.sym_suivant();
-      listLexical.add( sym_cour.CODE);
+      if(sym_cour.CODE != CODES_LEX.COMMENT_TOKEN){
+          listLexical.add( sym_cour.CODE);
+      }
       al.Lire_Car();
       while((al.Car_Cour==' ' || al.Car_Cour=='\n' || al.Car_Cour=='\t') && al.getCour()<charList.size()) {
        al.Lire_Car();
@@ -56,7 +58,7 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
 
 
     public CODES_LEX Sym_Suiv() throws  Exception{
-     if(index<=listLexical.size()) {
+     if(index<=listLexical.size() - 1) {
       CODE_LEX_Cour = listLexical.get(index++);
      }
        return CODE_LEX_Cour;
@@ -188,15 +190,45 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
        Test_Symbole(CODES_LEX.CAR_CONSTANTE,ERR_SYNTAX.CAR_CONSTANTE_ERR);
       }else if(CODE_LEX_Cour==CODES_LEX.CHAINE_CONSTANTE){
        Test_Symbole(CODES_LEX.CHAINE_CONSTANTE,ERR_SYNTAX.CHAINE_CONSTANTE_ERR);
+      }else{
+          ERROR(ERR_SYNTAX.VALUE_ERR);
       }
     }
 
     @Override
     public void APPEL_FONCTION() throws Exception {
-       Test_Symbole(CODES_LEX.ID_TOKEN,ERR_SYNTAX.ID_ERR);
-       Test_Symbole(CODES_LEX.PO_TOKEN,ERR_SYNTAX.PO_ERR);
-       ARGUMENT_LIST();
-       Test_Symbole(CODES_LEX.PF_TOKEN,ERR_SYNTAX.PF_ERR);
+        switch (CODE_LEX_Cour){
+            case ID_TOKEN:
+                Test_Symbole(CODES_LEX.ID_TOKEN,ERR_SYNTAX.ID_ERR);
+                APPEL_FONCTION2();
+//                Test_Symbole(CODES_LEX.PO_TOKEN,ERR_SYNTAX.PO_ERR);
+//                ARGUMENT_LIST();
+//                Test_Symbole(CODES_LEX.PF_TOKEN,ERR_SYNTAX.PF_ERR);
+                break;
+            default:
+                ERROR(ERR_SYNTAX.APPEL_FONCTION_ERR);
+                break;
+
+        }
+
+    }
+
+    @Override
+    public void APPEL_FONCTION2() throws Exception {
+        switch (CODE_LEX_Cour){
+            case PO_TOKEN:
+                Test_Symbole(CODES_LEX.PO_TOKEN, ERR_SYNTAX.PO_ERR);
+                ARGUMENT_LIST();
+                Test_Symbole(CODES_LEX.PF_TOKEN, ERR_SYNTAX.PF_ERR);
+                break;
+            case PF_TOKEN:
+            case VIR_TOKEN:
+            case PV_TOKEN:
+                break;
+            default:
+                ERROR(ERR_SYNTAX.APPEL_FONCTION2_ERR);
+                break;
+        }
     }
 
     @Override
@@ -256,24 +288,30 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
             case NUM_TOKEN:
             case PO_TOKEN:
                 EXPRESSION_STATEMENT();
+                STATEMENT();
                 break;
             case SI_TOKEN:
             case SELON_TOKEN:
                 CONDITIONAL_STATEMENT();
+                STATEMENT();
                 break;
             case TANT_QUE_TOKEN:
             case POUR_TOKEN:
             case REPETER_TOKEN:
                 LOOP_STATEMENT();
+                STATEMENT();
+
                 break;
             case RETOURNER_TOKEN:
                 RETURN_STATEMENT();
+                STATEMENT();
+
                 break;
             case FIN_TOKEN:
             case FINTQ_TOKEN:
             case FINPOUR_TOKEN:
             case JUSQUA_TOKEN:
-            case FIN_CAS:
+            case FIN_CAS_TOKEN:
             case FINSI_TOKEN:
             case SINON_TOKEN:
             case FINSELON_TOKEN:
@@ -326,7 +364,13 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
         Test_Symbole(CODES_LEX.DEUX_POINTS_TOKEN,ERR_SYNTAX.DEUX_POINTS_ERR);
         TYPE_SPECIFIER();
         DECLARATION2();
-       }else{
+       }else if(CODES_LEX.PO_TOKEN == CODE_LEX_Cour){
+           Test_Symbole(CODES_LEX.PO_TOKEN, ERR_SYNTAX.PO_ERR);
+           ARGUMENT_LIST();
+           Test_Symbole(CODES_LEX.PF_TOKEN, ERR_SYNTAX.PF_ERR);
+           Test_Symbole(CODES_LEX.PV_TOKEN, ERR_SYNTAX.PV_ERR);
+        }
+       else{
         ERROR(ERR_SYNTAX.EXPRESSION_STATEMENT2_ERR);
        }
     }
@@ -400,11 +444,37 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
 
     @Override
     public void CASE() throws Exception{
-     Test_Symbole(CODES_LEX.ENTIER_TOKEN,ERR_SYNTAX.ENTIER_ERR);
-     Test_Symbole(CODES_LEX.DEUX_POINTS_TOKEN,ERR_SYNTAX.DEUX_POINTS_ERR);
-     STATEMENT();
-     Test_Symbole(CODES_LEX.FIN_CAS,ERR_SYNTAX.FIN_CAS_ERR);
-     CASE();
+        switch (CODE_LEX_Cour){
+            case CAR_CONSTANTE:
+                Test_Symbole(CODES_LEX.CAR_CONSTANTE, ERR_SYNTAX.CAR_ERR);
+                Test_Symbole(CODES_LEX.DEUX_POINTS_TOKEN,ERR_SYNTAX.DEUX_POINTS_ERR);
+                STATEMENT();
+                Test_Symbole(CODES_LEX.FIN_CAS_TOKEN,ERR_SYNTAX.FIN_CAS_ERR);
+                CASE();
+                break;
+            case NUM_TOKEN:
+                Test_Symbole(CODES_LEX.NUM_TOKEN, ERR_SYNTAX.NUM_ERR);
+                Test_Symbole(CODES_LEX.DEUX_POINTS_TOKEN,ERR_SYNTAX.DEUX_POINTS_ERR);
+                STATEMENT();
+                Test_Symbole(CODES_LEX.FIN_CAS_TOKEN,ERR_SYNTAX.FIN_CAS_ERR);
+                CASE();
+                break;
+
+            case ID_TOKEN:
+                Test_Symbole(CODES_LEX.ID_TOKEN, ERR_SYNTAX.ID_ERR);
+                Test_Symbole(CODES_LEX.DEUX_POINTS_TOKEN,ERR_SYNTAX.DEUX_POINTS_ERR);
+                STATEMENT();
+                Test_Symbole(CODES_LEX.FIN_CAS_TOKEN,ERR_SYNTAX.FIN_CAS_ERR);
+                CASE();
+                break;
+            case SINON_TOKEN:
+            case FINSELON_TOKEN:
+                break;
+            default:
+                ERROR(ERR_SYNTAX.CASE_ERR);
+                break;
+        }
+
     }
 
     @Override
@@ -502,11 +572,20 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
 
     @Override
     public void AFFECTATION_EXPRESSION2() throws Exception{
-     if(CODE_LEX_Cour==CODES_LEX.NUM_TOKEN || CODE_LEX_Cour==CODE_LEX_Cour){
-      ADDITIVE_EXPRESSION();
-     }else{
-      ERROR(ERR_SYNTAX.AFFECTATION_EXPRESSION2_ERR);
-     }
+        switch (CODE_LEX_Cour){
+            case NUM_TOKEN:
+            case ID_TOKEN:
+            case PO_TOKEN:
+            case CAR_CONSTANTE:
+            case CHAINE_CONSTANTE:
+                ADDITIVE_EXPRESSION();
+                break;
+            default:
+                ERROR(ERR_SYNTAX.AFFECTATION_EXPRESSION2_ERR);
+                break;
+
+        }
+
     }
 
     @Override
@@ -538,9 +617,13 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
 
     @Override
     public void LOGICAL_OU_EXPRESSION() throws Exception{
-     if(CODE_LEX_Cour==CODES_LEX.ID_TOKEN || CODE_LEX_Cour==CODES_LEX.NUM_TOKEN || CODE_LEX_Cour==CODES_LEX.PO_TOKEN){
-      LOGICAL_ET_EXPRESSION();
-      LOGICAL_OU_EXPRESSION2();
+        if(CODE_LEX_Cour==CODES_LEX.ID_TOKEN ||
+                CODE_LEX_Cour==CODES_LEX.NUM_TOKEN || CODE_LEX_Cour==CODES_LEX.PO_TOKEN
+                || CODE_LEX_Cour == CODES_LEX.CAR_CONSTANTE || CODE_LEX_Cour == CODES_LEX.CHAINE_CONSTANTE
+
+        ){
+            LOGICAL_ET_EXPRESSION();
+            LOGICAL_OU_EXPRESSION2();
      }else{
       ERROR(ERR_SYNTAX.LOGICAL_OU_EXPRESSION_ERR);
      }
@@ -567,8 +650,12 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
 
  @Override
    public void LOGICAL_ET_EXPRESSION() throws Exception {
-    if(CODE_LEX_Cour==CODES_LEX.ID_TOKEN || CODE_LEX_Cour==CODES_LEX.NUM_TOKEN || CODE_LEX_Cour==CODES_LEX.PO_TOKEN){
-     EQUALITY_EXPRESSION();
+     if(CODE_LEX_Cour==CODES_LEX.ID_TOKEN ||
+             CODE_LEX_Cour==CODES_LEX.NUM_TOKEN || CODE_LEX_Cour==CODES_LEX.PO_TOKEN
+             || CODE_LEX_Cour == CODES_LEX.CAR_CONSTANTE || CODE_LEX_Cour == CODES_LEX.CHAINE_CONSTANTE
+
+     ) {
+         EQUALITY_EXPRESSION();
      LOGICAL_ET_EXPRESSION2();
      }else{
      ERROR(ERR_SYNTAX.LOGICAL_ET_EXPRESSION_ERR);
@@ -598,8 +685,12 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
 
  @Override
     public void EQUALITY_EXPRESSION() throws Exception{
-    if(CODE_LEX_Cour==CODES_LEX.ID_TOKEN || CODE_LEX_Cour==CODES_LEX.NUM_TOKEN || CODE_LEX_Cour==CODES_LEX.PO_TOKEN){
-     RELATIONAL_EXPRESSION();
+     if(CODE_LEX_Cour==CODES_LEX.ID_TOKEN ||
+             CODE_LEX_Cour==CODES_LEX.NUM_TOKEN || CODE_LEX_Cour==CODES_LEX.PO_TOKEN
+             || CODE_LEX_Cour == CODES_LEX.CAR_CONSTANTE || CODE_LEX_Cour == CODES_LEX.CHAINE_CONSTANTE
+
+     ){
+         RELATIONAL_EXPRESSION();
      EQUALITY_EXPRESSION2();
      }else{
       ERROR(ERR_SYNTAX.EQUALITY_EXPRESSION_ERR);
@@ -634,8 +725,12 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
 
     @Override
     public void RELATIONAL_EXPRESSION() throws Exception{
-     if(CODE_LEX_Cour==CODES_LEX.ID_TOKEN || CODE_LEX_Cour==CODES_LEX.NUM_TOKEN || CODE_LEX_Cour==CODES_LEX.PO_TOKEN){
-      ADDITIVE_EXPRESSION();
+        if(CODE_LEX_Cour==CODES_LEX.ID_TOKEN ||
+                CODE_LEX_Cour==CODES_LEX.NUM_TOKEN || CODE_LEX_Cour==CODES_LEX.PO_TOKEN
+                || CODE_LEX_Cour == CODES_LEX.CAR_CONSTANTE || CODE_LEX_Cour == CODES_LEX.CHAINE_CONSTANTE
+
+        ){
+            ADDITIVE_EXPRESSION();
       RELATIONAL_EXPRESSION2();
      }else{
       ERROR(ERR_SYNTAX.RELATIONAL_EXPRESSION_ERR);
@@ -681,7 +776,11 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
 
     @Override
     public void ADDITIVE_EXPRESSION() throws Exception{
-     if(CODE_LEX_Cour==CODES_LEX.ID_TOKEN || CODE_LEX_Cour==CODES_LEX.NUM_TOKEN || CODE_LEX_Cour==CODES_LEX.PO_TOKEN){
+     if(CODE_LEX_Cour==CODES_LEX.ID_TOKEN ||
+             CODE_LEX_Cour==CODES_LEX.NUM_TOKEN || CODE_LEX_Cour==CODES_LEX.PO_TOKEN
+     || CODE_LEX_Cour == CODES_LEX.CAR_CONSTANTE || CODE_LEX_Cour == CODES_LEX.CHAINE_CONSTANTE
+
+     ){
      MULTIPLICATIVE_EXPRESSION();
      ADDITIVE_EXPRESSION2();
      }else{
@@ -722,8 +821,12 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
 
     @Override
     public void MULTIPLICATIVE_EXPRESSION() throws Exception{
-     if(CODE_LEX_Cour==CODES_LEX.ID_TOKEN || CODE_LEX_Cour==CODES_LEX.NUM_TOKEN || CODE_LEX_Cour==CODES_LEX.PO_TOKEN){
-      POSTFIX_EXPRESSION();
+        if(CODE_LEX_Cour==CODES_LEX.ID_TOKEN ||
+                CODE_LEX_Cour==CODES_LEX.NUM_TOKEN || CODE_LEX_Cour==CODES_LEX.PO_TOKEN
+                || CODE_LEX_Cour == CODES_LEX.CAR_CONSTANTE || CODE_LEX_Cour == CODES_LEX.CHAINE_CONSTANTE
+
+        )  {
+            POSTFIX_EXPRESSION();
       MULTIPLICATIVE_EXPRESSION2();
      }else{
       ERROR(ERR_SYNTAX.MULTIPLICATIVE_EXPRESSION_ERR);
@@ -780,7 +883,12 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
       Test_Symbole(CODES_LEX.PO_TOKEN,ERR_SYNTAX.PO_ERR);
       TEST_EXPRESSION();
       Test_Symbole(CODES_LEX.PF_TOKEN,ERR_SYNTAX.PF_ERR);
-     }else{
+     }else if(CODE_LEX_Cour==CODES_LEX.CAR_CONSTANTE){
+         Test_Symbole(CODES_LEX.CAR_CONSTANTE,ERR_SYNTAX.CAR_CONSTANTE_ERR);
+     }else if(CODE_LEX_Cour==CODES_LEX.CHAINE_CONSTANTE){
+         Test_Symbole(CODES_LEX.CHAINE_CONSTANTE,ERR_SYNTAX.CHAINE_CONSTANTE_ERR);
+     }
+     else{
       ERROR(ERR_SYNTAX.POSTFIX_EXPRESSION_ERR);
      }
     }
@@ -886,8 +994,8 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
     public void TYPE_SPECIFIER() throws Exception{
       if(CODES_LEX.ENTIER_TOKEN==CODE_LEX_Cour){
        Test_Symbole(CODES_LEX.ENTIER_TOKEN,ERR_SYNTAX.ENTIER_ERR);
-      }else if(CODE_LEX_Cour==CODES_LEX.CAR_CONSTANTE){
-       Test_Symbole(CODES_LEX.CAR_CONSTANTE,ERR_SYNTAX.CAR_CONSTANTE_ERR);
+      }else if(CODE_LEX_Cour==CODES_LEX.CAR_TOEKN){
+       Test_Symbole(CODES_LEX.CAR_TOEKN,ERR_SYNTAX.CAR_ERR);
       }else if(CODE_LEX_Cour==CODES_LEX.REEL_TOKEN){
        Test_Symbole(CODES_LEX.REEL_TOKEN,ERR_SYNTAX.REEL_ERR);
       }else if(CODES_LEX.VIDE_TOKEN==CODE_LEX_Cour){

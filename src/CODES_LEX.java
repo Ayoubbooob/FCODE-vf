@@ -62,7 +62,7 @@ public enum CODES_LEX {
     NON_TOKEN,
     OU_TOKEN,
     ET_TOKEN,
-    FIN_CAS,
+    FIN_CAS_TOKEN,
     //erreur
 
     UNCLOSED_CHAINE

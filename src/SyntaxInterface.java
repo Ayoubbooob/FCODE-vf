@@ -52,4 +52,6 @@ public interface SyntaxInterface {
     void RETURN_STATEMENT()throws Exception;
     void VAL_RETOURNER()throws Exception;
     void TYPE_SPECIFIER()throws Exception;
+
+    void APPEL_FONCTION2() throws Exception;
 }
