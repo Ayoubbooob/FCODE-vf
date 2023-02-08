@@ -8,6 +8,7 @@ import java.util.prefs.PreferencesFactory;
 
 public class AnalyseurSyntaxique implements SyntaxInterface{
    private   ArrayList<CODES_LEX> listLexical = new ArrayList<>();
+   private ArrayList<String> errorName =  new ArrayList<>();
    private CODES_LEX CODE_LEX_Cour;
    private int index = 0;
     AnalyseurSyntaxique() throws Exception{

@@ -287,20 +287,34 @@ public class AnalyseurLexical{
                 symbole+= (char) Car_Cour;
                 Lire_Car();
                 if (Car_Cour == '*') {
+                    symbole+= (char) Car_Cour;
+                    boolean isComment = false;
                     Lire_Car();
-                    while ((Car_Cour != '*') && (Car_Cour != (char) -1)) {
-                        symbole+= (char) Car_Cour;
-                        Lire_Car();
+                    while (!isComment && (Car_Cour != (char) -1)) {
+                        if(Car_Cour == '*'){
+                            Lire_Car();
+                            if(Car_Cour == '/'){
+                                symbole+=  '*';
+                                symbole+=  '/';
+                                isComment = true;
+                            }else{
+                                symbole+=  '*';
+                                Car_Cour = charList.get(cour-1);
+                                cour--;
+                            }
+                        }else{
+                            symbole += (char) Car_Cour;
+                            Lire_Car();
+                        }
                     }
-                    if (Car_Cour != '*') {
-                        Lire_Car();
-                        sym_cour.setCODE(CODES_LEX.ERREUR_TOKEN);
-                    } else
-                        Lire_Car();
-                    if (Car_Cour == '/') {
-                        sym_cour.nom = symbole.toString();
-                        sym_cour.setCODE(CODES_LEX.COMMENT_TOKEN);
-                    }
+
+                   if(isComment){
+                       sym_cour.nom = symbole.toString();
+                       sym_cour.setCODE(CODES_LEX.COMMENT_TOKEN);
+                   }else{
+                       sym_cour.nom = symbole.toString();
+                       sym_cour.setCODE(CODES_LEX.UNCLOSED_COMMENT);
+                   }
                 } else {
                     sym_cour.nom = symbole.toString();
                     sym_cour.setCODE(CODES_LEX.DIV_TOKEN);

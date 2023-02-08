@@ -65,7 +65,7 @@ public enum CODES_LEX {
     FIN_CAS_TOKEN,
     //erreur
 
-    UNCLOSED_CHAINE
+    UNCLOSED_COMMENT, UNCLOSED_CHAINE
 }
 
 
