@@ -3,7 +3,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.prefs.PreferencesFactory;
 
 public class AnalyseurSyntaxique implements SyntaxInterface{
@@ -11,6 +13,10 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
    private ArrayList<String> errorName =  new ArrayList<>();
    private CODES_LEX CODE_LEX_Cour;
    private int index = 0;
+
+
+
+    private String courant;
     AnalyseurSyntaxique() throws Exception{
      analyseurLexical();
     }
@@ -34,9 +40,11 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
      AnalyseurLexical al = new AnalyseurLexical(charList);
      al.Lire_Car();
      this.listLexical = new ArrayList<>();
+     this.errorName = new ArrayList<>();
      while (al.getCour()<charList.size()-1){
       TSym_Cour sym_cour = al.sym_suivant();
       if(sym_cour.CODE != CODES_LEX.COMMENT_TOKEN){
+          errorName.add(sym_cour.nom);
           listLexical.add( sym_cour.CODE);
       }
       al.Lire_Car();
@@ -48,19 +56,20 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
 
     }
 
-/*
+
     public void display(){
-     for (CODES_LEX CODE:this.listLexical) {
-      System.out.println(CODE);
+     for (String s : errorName) {
+      System.out.println(s);
      }
     }
 
- */
+
 
 
     public CODES_LEX Sym_Suiv() throws  Exception{
      if(index<=listLexical.size() - 1) {
-      CODE_LEX_Cour = listLexical.get(index++);
+         courant = errorName.get(index);
+         CODE_LEX_Cour = listLexical.get(index++);
      }
        return CODE_LEX_Cour;
     }
@@ -69,13 +78,14 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
       if(cl == CODE_LEX_Cour){
        Sym_Suiv();
       }else{
-       ERROR(ERR);
+       ERROR(courant, ERR);
        return;
       }
     }
 
-    public void ERROR(ERR_SYNTAX ERR){
-      System.out.println(ERR);
+    public void ERROR(String courant, ERR_SYNTAX ERR){
+      System.err.println(courant + " : "+ERR);
+      System.exit(-1);
     }
 
     public  boolean analyseSyntax() throws Exception{
@@ -96,7 +106,7 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
       EXTERNAL_DECLARATION();
       PROGRAM2();
      }else{
-       ERROR(ERR_SYNTAX.PROGRAM_ERR);
+       ERROR(courant, ERR_SYNTAX.PROGRAM_ERR);
      }
     }
 
@@ -104,6 +114,8 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
     public void PROGRAM2() throws Exception{
      if(CODE_LEX_Cour==CODES_LEX.FONCTION_TOKEN || CODE_LEX_Cour == CODES_LEX.ID_TOKEN ){
       PROGRAM();
+     }else{
+         ERROR(courant, ERR_SYNTAX.PROGRAM2_ERR);
      }
     }
 
@@ -114,7 +126,7 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
       }else if(CODE_LEX_Cour==CODES_LEX.ID_TOKEN){
        DECLARATION();
       }else{
-        ERROR(ERR_SYNTAX.EXTERNAL_DECLARATION_ERR);
+        ERROR(courant, ERR_SYNTAX.EXTERNAL_DECLARATION_ERR);
       }
     }
 
@@ -140,7 +152,7 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
                 PLUS_PARAMETRES();
                 break;
             case PF_TOKEN: break;
-            default: ERROR(ERR_SYNTAX.PARAMETER_DECLARATION_ERR); break;
+            default: ERROR(courant, ERR_SYNTAX.PARAMETER_DECLARATION_ERR); break;
 
         }
 
@@ -154,7 +166,7 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
                 PARAMETER_DECLARATION();
                 break;
             case PF_TOKEN: break;
-            default: ERROR(ERR_SYNTAX.PLUS_PARAMETRES_ERR); break;
+            default: ERROR(courant, ERR_SYNTAX.PLUS_PARAMETRES_ERR); break;
 
         }
 
@@ -177,7 +189,7 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
         VALUE();
         Test_Symbole(CODES_LEX.PV_TOKEN,ERR_SYNTAX.PV_ERR);
        }else{
-        ERROR(ERR_SYNTAX.DECLARATION2_ERR);
+        ERROR(courant, ERR_SYNTAX.DECLARATION2_ERR);
        }
     }
 
@@ -192,7 +204,7 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
       }else if(CODE_LEX_Cour==CODES_LEX.CHAINE_CONSTANTE){
        Test_Symbole(CODES_LEX.CHAINE_CONSTANTE,ERR_SYNTAX.CHAINE_CONSTANTE_ERR);
       }else{
-          ERROR(ERR_SYNTAX.VALUE_ERR);
+          ERROR(courant, ERR_SYNTAX.VALUE_ERR);
       }
     }
 
@@ -207,7 +219,7 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
 //                Test_Symbole(CODES_LEX.PF_TOKEN,ERR_SYNTAX.PF_ERR);
                 break;
             default:
-                ERROR(ERR_SYNTAX.APPEL_FONCTION_ERR);
+                ERROR(courant, ERR_SYNTAX.APPEL_FONCTION_ERR);
                 break;
 
         }
@@ -227,7 +239,7 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
             case PV_TOKEN:
                 break;
             default:
-                ERROR(ERR_SYNTAX.APPEL_FONCTION2_ERR);
+                ERROR(courant, ERR_SYNTAX.APPEL_FONCTION2_ERR);
                 break;
         }
     }
@@ -243,7 +255,7 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
                 VALUE_EPSILON();
                 break;
             case PF_TOKEN: break;
-            default: ERROR(ERR_SYNTAX.ARGUMENT_LIST_ERR);break;
+            default: ERROR(courant, ERR_SYNTAX.ARGUMENT_LIST_ERR);break;
         }
 //     if(CODE_LEX_Cour == CODES_LEX.ID_TOKEN){
 //      VALUE();
@@ -269,7 +281,7 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
                 VALUE_EPSILON();
                 break;
             case PF_TOKEN: break;
-            default:ERROR(ERR_SYNTAX.VALUE_EPSILON_ERR); break;
+            default:ERROR(courant, ERR_SYNTAX.VALUE_EPSILON_ERR); break;
         }
     }
 
@@ -317,7 +329,7 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
             case SINON_TOKEN:
             case FINSELON_TOKEN:
                 break;
-            default: ERROR(ERR_SYNTAX.STATEMENT_ERR); break;
+            default: ERROR(courant, ERR_SYNTAX.STATEMENT_ERR); break;
         }
 //     if(CODES_LEX.ID_TOKEN == CODE_LEX_Cour  || CODES_LEX.NUM_TOKEN ==CODE_LEX_Cour || CODES_LEX.PO_TOKEN==CODE_LEX_Cour){
 //      EXPRESSION_STATEMENT();
@@ -328,7 +340,7 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
 //     }else if(CODES_LEX.RETOURNER_TOKEN == CODE_LEX_Cour){
 //      RETURN_STATEMENT();
 //     }else{
-//      //ERROR(ERR_SYNTAX.STATEMENT_ERR);
+//      //ERROR(courant, ERR_SYNTAX.STATEMENT_ERR);
 //     }
     }
 
@@ -344,7 +356,7 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
         TEST_EXPRESSION();
         Test_Symbole(CODES_LEX.PF_TOKEN,ERR_SYNTAX.PF_ERR);
        }else{
-        ERROR(ERR_SYNTAX.EXPRESSION_STATEMENT_ERR);
+        ERROR(courant, ERR_SYNTAX.EXPRESSION_STATEMENT_ERR);
        }
     }
 
@@ -372,7 +384,7 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
            Test_Symbole(CODES_LEX.PV_TOKEN, ERR_SYNTAX.PV_ERR);
         }
        else{
-        ERROR(ERR_SYNTAX.EXPRESSION_STATEMENT2_ERR);
+        ERROR(courant, ERR_SYNTAX.EXPRESSION_STATEMENT2_ERR);
        }
     }
 
@@ -383,7 +395,7 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
         }else if(CODE_LEX_Cour== CODES_LEX.SELON_TOKEN){
          SELON_STATEMENT();
         }else{
-         ERROR(ERR_SYNTAX.CONDITIONAL_STATEMENT_ERR);
+         ERROR(courant, ERR_SYNTAX.CONDITIONAL_STATEMENT_ERR);
         }
     }
 
@@ -407,7 +419,7 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
                 STATEMENT();
                 break;
             case FINSI_TOKEN:break;
-            default: ERROR(ERR_SYNTAX.SINONSTATEMENT_ERR); break;
+            default: ERROR(courant, ERR_SYNTAX.SINONSTATEMENT_ERR); break;
 
         }
     }
@@ -436,7 +448,7 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
         case FINSELON_TOKEN:
             break;
         default:
-            ERROR(ERR_SYNTAX.SELON_FACTORI_ERR);
+            ERROR(courant, ERR_SYNTAX.SELON_FACTORI_ERR);
             break;
 
     }
@@ -472,7 +484,7 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
             case FINSELON_TOKEN:
                 break;
             default:
-                ERROR(ERR_SYNTAX.CASE_ERR);
+                ERROR(courant, ERR_SYNTAX.CASE_ERR);
                 break;
         }
 
@@ -487,7 +499,7 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
      }else if(CODES_LEX.REPETER_TOKEN==CODE_LEX_Cour){
       REPETER_STATEMENT();
      }else {
-      ERROR(ERR_SYNTAX.LOOP_STATEMENT_ERR);
+      ERROR(courant, ERR_SYNTAX.LOOP_STATEMENT_ERR);
      }
     }
 
@@ -540,7 +552,7 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
             case PV_TOKEN:
                 break;
             default:
-                ERROR(ERR_SYNTAX.INITIALISATION_EXPRESSION_ERR);
+                ERROR(courant, ERR_SYNTAX.INITIALISATION_EXPRESSION_ERR);
                 break;
         }
 
@@ -559,7 +571,7 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
           case PV_TOKEN:
               break;
           default:
-              ERROR(ERR_SYNTAX.AUTRE_INITIALISATIONS_ERR);
+              ERROR(courant, ERR_SYNTAX.AUTRE_INITIALISATIONS_ERR);
               break;
       }
     }
@@ -582,7 +594,7 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
                 ADDITIVE_EXPRESSION();
                 break;
             default:
-                ERROR(ERR_SYNTAX.AFFECTATION_EXPRESSION2_ERR);
+                ERROR(courant, ERR_SYNTAX.AFFECTATION_EXPRESSION2_ERR);
                 break;
 
         }
@@ -608,7 +620,7 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
             case PV_TOKEN:
                 break;
             default:
-                ERROR(ERR_SYNTAX.TEST_EXPRESSION_ERR);
+                ERROR(courant, ERR_SYNTAX.TEST_EXPRESSION_ERR);
                 break;
 
         }
@@ -626,7 +638,7 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
             LOGICAL_ET_EXPRESSION();
             LOGICAL_OU_EXPRESSION2();
      }else{
-      ERROR(ERR_SYNTAX.LOGICAL_OU_EXPRESSION_ERR);
+      ERROR(courant, ERR_SYNTAX.LOGICAL_OU_EXPRESSION_ERR);
      }
     }
 
@@ -643,7 +655,7 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
          case PF_TOKEN:
              break;
          default:
-             ERROR(ERR_SYNTAX.LOGICAL_OU_EXPRESSION2_ERR);
+             ERROR(courant, ERR_SYNTAX.LOGICAL_OU_EXPRESSION2_ERR);
              break;
      }
 
@@ -659,7 +671,7 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
          EQUALITY_EXPRESSION();
      LOGICAL_ET_EXPRESSION2();
      }else{
-     ERROR(ERR_SYNTAX.LOGICAL_ET_EXPRESSION_ERR);
+     ERROR(courant, ERR_SYNTAX.LOGICAL_ET_EXPRESSION_ERR);
      }
     }
 
@@ -677,7 +689,7 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
             case PV_TOKEN:
                 break;
             default:
-                ERROR(ERR_SYNTAX.LOGICAL_ET_EXPRESSION2_ERR);
+                ERROR(courant, ERR_SYNTAX.LOGICAL_ET_EXPRESSION2_ERR);
                 break;
 
         }
@@ -694,7 +706,7 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
          RELATIONAL_EXPRESSION();
      EQUALITY_EXPRESSION2();
      }else{
-      ERROR(ERR_SYNTAX.EQUALITY_EXPRESSION_ERR);
+      ERROR(courant, ERR_SYNTAX.EQUALITY_EXPRESSION_ERR);
     }
     }
 
@@ -716,7 +728,7 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
             case PV_TOKEN:
                 break;
             default:
-                ERROR(ERR_SYNTAX.EQUALITY_EXPRESSION2_ERR);
+                ERROR(courant, ERR_SYNTAX.EQUALITY_EXPRESSION2_ERR);
                 break;
 
 
@@ -734,7 +746,7 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
             ADDITIVE_EXPRESSION();
       RELATIONAL_EXPRESSION2();
      }else{
-      ERROR(ERR_SYNTAX.RELATIONAL_EXPRESSION_ERR);
+      ERROR(courant, ERR_SYNTAX.RELATIONAL_EXPRESSION_ERR);
      }
     }
 
@@ -769,7 +781,7 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
             case EG_TOKEN:
                 break;
             default:
-                ERROR(ERR_SYNTAX.RELATIONAL_EXPRESSION2_ERR);
+                ERROR(courant, ERR_SYNTAX.RELATIONAL_EXPRESSION2_ERR);
                 break;
         }
 
@@ -785,7 +797,7 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
      MULTIPLICATIVE_EXPRESSION();
      ADDITIVE_EXPRESSION2();
      }else{
-      ERROR(ERR_SYNTAX.ADDITIVE_EXPRESSION_ERR);
+      ERROR(courant, ERR_SYNTAX.ADDITIVE_EXPRESSION_ERR);
      }
     }
 
@@ -814,7 +826,7 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
             case CRF_TOKEN:
                 break;
             default:
-                ERROR(ERR_SYNTAX.ADDITIVE_EXPRESSION2_ERR);
+                ERROR(courant, ERR_SYNTAX.ADDITIVE_EXPRESSION2_ERR);
                 break;
         }
 
@@ -830,7 +842,7 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
             POSTFIX_EXPRESSION();
       MULTIPLICATIVE_EXPRESSION2();
      }else{
-      ERROR(ERR_SYNTAX.MULTIPLICATIVE_EXPRESSION_ERR);
+      ERROR(courant, ERR_SYNTAX.MULTIPLICATIVE_EXPRESSION_ERR);
      }
     }
 
@@ -867,7 +879,7 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
             case MOINS_TOKEN:
                 break;
             default:
-                ERROR(ERR_SYNTAX.MULTIPLICATIVE_EXPRESSION2_ERR);
+                ERROR(courant, ERR_SYNTAX.MULTIPLICATIVE_EXPRESSION2_ERR);
                 break;
         }
 
@@ -890,7 +902,7 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
          Test_Symbole(CODES_LEX.CHAINE_CONSTANTE,ERR_SYNTAX.CHAINE_CONSTANTE_ERR);
      }
      else{
-      ERROR(ERR_SYNTAX.POSTFIX_EXPRESSION_ERR);
+      ERROR(courant, ERR_SYNTAX.POSTFIX_EXPRESSION_ERR);
      }
     }
 
@@ -919,7 +931,7 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
             case DIV_TOKEN:
                 break;
             default:
-                ERROR(ERR_SYNTAX.POSTFIX_EXPRESSION2_ERR);
+                ERROR(courant, ERR_SYNTAX.POSTFIX_EXPRESSION2_ERR);
                 break;
         }
     }
@@ -933,7 +945,7 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
        ARGUMENT_LIST();
        Test_Symbole(CODES_LEX.PF_TOKEN,ERR_SYNTAX.PF_ERR);
       }else{
-       ERROR(ERR_SYNTAX.IDENTIFIER2_ERR);
+       ERROR(courant, ERR_SYNTAX.IDENTIFIER2_ERR);
       }
     }
 
@@ -969,7 +981,7 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
             case DIV_TOKEN:
                 break;
             default:
-                ERROR(ERR_SYNTAX.TAB_FACTOR_ERR);
+                ERROR(courant, ERR_SYNTAX.TAB_FACTOR_ERR);
                 break;
 
         }
@@ -987,7 +999,7 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
      if(CODE_LEX_Cour==CODES_LEX.ID_TOKEN || CODE_LEX_Cour==CODES_LEX.NUM_TOKEN || CODE_LEX_Cour==CODES_LEX.PO_TOKEN || CODE_LEX_Cour==CODES_LEX.NON_TOKEN){
      TEST_EXPRESSION();
      }else{
-      ERROR(ERR_SYNTAX.VAL_RETOURNER_ERR);
+      ERROR(courant, ERR_SYNTAX.VAL_RETOURNER_ERR);
      }
     }
 
@@ -1002,7 +1014,7 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
       }else if(CODES_LEX.VIDE_TOKEN==CODE_LEX_Cour){
        Test_Symbole(CODES_LEX.VIDE_TOKEN,ERR_SYNTAX.VIDE_ERR);
       }else{
-       ERROR(ERR_SYNTAX.TYPE_SPECIFIER_ERR);
+       ERROR(courant, ERR_SYNTAX.TYPE_SPECIFIER_ERR);
       }
     }
 }
