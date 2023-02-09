@@ -1,30 +1,32 @@
 
+import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.prefs.PreferencesFactory;
 
 public class AnalyseurSyntaxique implements SyntaxInterface{
    private   ArrayList<CODES_LEX> listLexical = new ArrayList<>();
    private ArrayList<String> errorName =  new ArrayList<>();
+
    private CODES_LEX CODE_LEX_Cour;
    private int index = 0;
-
-
+   private File fileACompiler;
+   public boolean isCorrect = true;
+   JTextArea codeTextArea;
 
     private String courant;
-    AnalyseurSyntaxique() throws Exception{
-     analyseurLexical();
+    AnalyseurSyntaxique(File fileACompiler) throws Exception{
+        this.codeTextArea = codeTextArea;
+        this.fileACompiler = fileACompiler;
+        analyseurLexical();
     }
     void analyseurLexical() throws Exception{
-//        File file = new File("C:\\Users\\Dell\\Desktop\\code\\code.fc");
-        File file = new File("C:\\Users\\AyouByte\\Desktop\\projet compila\\last dial last\\FCODE-cloned\\fcode.fc");
 
-        FileReader fr = new FileReader(file);
+//        File file = new File("C:\\Users\\AyouByte\\Desktop\\projet compila\\last dial last\\FCODE-cloned\\fcode.fc");
+        File file = new File("C:\\Users\\HP\\Desktop\\fcode.fc");
+        FileReader fr = new FileReader(fileACompiler);
      BufferedReader bf = new BufferedReader(fr);
      List<Character> charList = new ArrayList<>();
      int c;
@@ -56,12 +58,12 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
 
     }
 
-
-    public void display(){
-     for (String s : errorName) {
-      System.out.println(s);
-     }
-    }
+//
+//    public void display(){
+//     for (String s : errorName) {
+//      System.out.println(s);
+//     }
+//    }
 
 
 
@@ -375,11 +377,14 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
     }
 
     public void ERROR(String courant,ERR_SYNTAX ERR ){
+       if(isCorrect){
+           isCorrect=false;
+           String messageErr = "";
+           messageErr = getMessage(courant,ERR);
+           System.out.println("<h3 style='color:red;'>[Syntax Error]: "+messageErr+"</h3>");
+       }
 
-      String messageErr = "";
-      messageErr = getMessage(courant,ERR);
-      System.err.println("[Syntax Error]: "+messageErr);
-      System.exit(-1);
+      //System.exit(-1);
     }
 
     public  boolean analyseSyntax() throws Exception{

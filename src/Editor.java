@@ -55,6 +55,7 @@ public class Editor extends JFrame {
                 }
             }
         });
+
     }
 
     /**
@@ -160,9 +161,11 @@ public class Editor extends JFrame {
         // AFTER
         JButton syntaxButton = new JButton("Analyseur syntaxique >>");
         syntaxButton.setBounds(523, 335, 179, 41);
+        syntaxButton.setIcon(new ImageIcon(url));
         contentPane.add(syntaxButton);
         JButton semanticButton = new JButton("Analyseur sémantique >>");
         semanticButton.setBounds(523, 397, 179, 41);
+        semanticButton.setIcon(new ImageIcon(url));
         contentPane.add(semanticButton);
 
 
@@ -180,7 +183,6 @@ public class Editor extends JFrame {
                         //The file will be created automatically in the project
                         if(selectedFile==null){
                             JOptionPane.showMessageDialog(null, "Erreur : Aucun Fichier seléctioné", "Aucun fichier sélectionné ", JOptionPane.ERROR_MESSAGE);
-
                         }else{
                             File fileACompiler = selectedFile;
                             FileWriter fw;
@@ -207,6 +209,67 @@ public class Editor extends JFrame {
                                 //main(String[] args, File f) method main in the Main_ class , we added one argument
                                 //to pass the file
                                 Main.main(null, fileACompiler);
+
+                                System.out.flush();
+                                System.setOut(old);
+                                String output = baos.toString();
+                                resultTextArea.setBackground(Color.WHITE);
+                                resultTextArea.setForeground(Color.BLACK);
+                                editorPane.setText(output);
+
+                            } catch (Exception e1) {
+                                // TODO Auto-generated catch block
+                                e1.printStackTrace();
+                            }
+
+                        }
+
+
+                    }
+
+                }
+
+
+        );
+
+        syntaxButton.addActionListener(
+
+                (ActionListener) new ActionListener() {
+
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        String code = codeTextArea.getText();
+                        //The idea here, is get The content of codeTextArea store it in a string variable, then append
+                        //this string to this file
+                        //The file will be created automatically in the project
+                        if(selectedFile==null){
+                            JOptionPane.showMessageDialog(null, "Erreur : Aucun Fichier seléctioné", "Aucun fichier sélectionné ", JOptionPane.ERROR_MESSAGE);
+                        }else{
+                            File fileACompiler = selectedFile;
+                            FileWriter fw;
+                            try {
+                                fw = new FileWriter(fileACompiler);
+                                fw.write(code);
+                                fw.close();
+
+                            } catch (IOException e1) {
+                                e1.printStackTrace();
+                            }
+
+
+                            //Here we redirected the console output to the output variable, then we set resultTextArea
+                            //by the content of the output variable
+
+                            try {
+
+                                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                PrintStream ps = new PrintStream(baos);
+                                PrintStream old = System.out;
+                                System.setOut(ps);
+
+                                //main(String[] args, File f) method main in the Main_ class , we added one argument
+                                //to pass the file
+                                Main2.main(null, fileACompiler);
 
                                 System.out.flush();
                                 System.setOut(old);

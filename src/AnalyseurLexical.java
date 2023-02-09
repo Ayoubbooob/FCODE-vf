@@ -322,10 +322,10 @@ public class AnalyseurLexical{
             case '>' :
                 Lire_Car();
                 if(Car_Cour=='=') {
-                    sym_cour.nom = ">=";
+                    sym_cour.nom = "&gt;=";
                     sym_cour.setCODE(CODES_LEX.SUPEG_TOKEN);
                 } else {
-                    sym_cour.nom = symbole.toString();
+                    sym_cour.nom = "&gt;";
                     sym_cour.setCODE(CODES_LEX.SUP_TOKEN);
 
                     Car_Cour = charList.get(cour-1);
@@ -335,14 +335,14 @@ public class AnalyseurLexical{
             case '<' :
                 Lire_Car();
                 if(Car_Cour=='=') {
-                    sym_cour.nom = "<=";
+                    sym_cour.nom = "&lt;=";
                     sym_cour.setCODE(CODES_LEX.INFEG_TOKEN);
                 }else
                 if(Car_Cour=='>') {
-                    sym_cour.nom = "<>";
+                    sym_cour.nom = "&lt;&gt;";
                     sym_cour.setCODE(CODES_LEX.DIFF_TOKEN);
                 } else {
-                    sym_cour.nom = "<";
+                    sym_cour.nom = "&lt;";
                     sym_cour.setCODE(CODES_LEX.INF_TOKEN);
 
                     Car_Cour = charList.get(cour-1);

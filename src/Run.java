@@ -1,12 +1,15 @@
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 public class Run {
 
-    public static void main(String[] args) throws IOException {
-
+    public static void main(String[] args) throws Exception {
+        File file= new File("C:\\Users\\HP\\Desktop\\S3\\projetCompilateur\\compilation\\fcode2.fc");
+        MainSemantique.main(null,file);
+        System.exit(0);
         String directory = "C:\\Users\\Dell\\Desktop\\compilation";
         String compileCommand = "gcc code.c -o code.exe";
         String executeCommand = "code.exe";
