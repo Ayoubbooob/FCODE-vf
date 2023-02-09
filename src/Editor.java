@@ -1,7 +1,4 @@
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.EventQueue;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.ByteArrayOutputStream;
@@ -13,8 +10,10 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.URL;
 import java.nio.file.Files;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -61,7 +60,7 @@ public class Editor extends JFrame {
     /**
      * Create the frame.
      */
-    public Editor() {
+    public Editor() throws IOException {
         setTitle("Fcode");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 1200, 700);
@@ -140,7 +139,9 @@ public class Editor extends JFrame {
 
         JButton lexicalButton = new JButton("Analyseur Lexical >> ");
         lexicalButton.setBounds(523, 271, 179, 41);
-        lexicalButton.setIcon(new ImageIcon("C:\\Users\\AyouByte\\Downloads\\gear (1).png"));
+
+        URL url = getClass().getClassLoader().getResource("assets/syntax_icon.png");
+        lexicalButton.setIcon(new ImageIcon(url));
         contentPane.add(lexicalButton);
 
         JEditorPane editorPane = new JEditorPane();

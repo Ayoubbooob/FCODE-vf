@@ -10,7 +10,7 @@ public class ErrorMessage {
         explicationMessage.put(ERR_SYNTAX.PROGRAM_ERR, "{Erreur syntaxique} : Erreur de declaration externe");
         explicationMessage.put(ERR_SYNTAX.PROGRAM2_ERR, "{Erreur syntaxique} : Erreur de declaration externe");
         explicationMessage.put(ERR_SYNTAX.EXTERNAL_DECLARATION_ERR, "{Erreur syntaxique} : Erreur de declaration externe");
-        explicationMessage.put(ERR_SYNTAX.FUN, "{Erreur syntaxique} : Erreur de declaration externe");
+        //explicationMessage.put(ERR_SYNTAX, "{Erreur syntaxique} : Erreur de declaration externe");
 
     }
 

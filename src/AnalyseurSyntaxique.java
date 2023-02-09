@@ -21,7 +21,7 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
      analyseurLexical();
     }
     void analyseurLexical() throws Exception{
-//     File file = new File("C:\\Users\\Dell\\Desktop\\code\\code.fc");
+//        File file = new File("C:\\Users\\Dell\\Desktop\\code\\code.fc");
         File file = new File("C:\\Users\\AyouByte\\Desktop\\projet compila\\last dial last\\FCODE-cloned\\fcode.fc");
 
         FileReader fr = new FileReader(file);
@@ -82,9 +82,303 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
        return;
       }
     }
+    public String getMessage(String courant,ERR_SYNTAX ERR){
+        String messageErr = "";
+        switch (ERR){
+            case ID_ERR:
+                messageErr+="expected identifier ==> found "+courant;
+                break;
+            case ENTIER_ERR:
+                messageErr+="expected entier ==> found "+courant;
+                break;
+            case FONCTION_ERR:
+                messageErr+="expected fonction ==> found "+courant;
+                break;
+            case DEBUT_ERR:
+                messageErr+="expected debut ==> found "+courant;
+                break;
+            case TYPE_SPECIFIER_ERR:
+                messageErr+="expected entier or car or reel or vide  ==> found "+courant;
+                break;
+            case FIN_ERR:
+                messageErr+="expected fin  ==> found "+courant;
+                break;
+            case RETOURNER_ERR:
+                messageErr+="expected retourner  ==> found "+courant;
+                break;
+            case REEL_ERR:
+                messageErr+="expected reel  ==> found "+courant;
+                break;
+            case VIDE_ERR:
+                messageErr+="expected vide  ==> found "+courant;
+                break;
+            case SI_ERR:
+                messageErr+="expected si  ==> found "+courant;
+                break;
+            case SINON_ERR:
+                messageErr+="expected sinon  ==> found "+courant;
+                break;
+            case ALORS_ERR:
+                messageErr+="expected alors  ==> found "+courant;
+                break;
+            case FINSI_ERR:
+                messageErr+="expected finsi  ==> found "+courant;
+                break;
+            case SELON_ERR:
+                messageErr+="expected selon  ==> found "+courant;
+                break;
+            case FAIRE_ERR:
+                messageErr+="expected faire  ==> found "+courant;
+                break;
+            case FINSELON_ERR:
+                messageErr+="expected finselon  ==> found "+courant;
+                break;
+            case TANT_QUE_ERR:
+                messageErr+="expected tantque  ==> found "+courant;
+                break;
+            case FINTQ_ERR:
+                messageErr+="expected fintq  ==> found "+courant;
+                break;
+            case REPETER_ERR:
+                messageErr+="expected repeter  ==> found "+courant;
+                break;
+            case JUSQUA_ERR:
+                messageErr+="expected jusqua  ==> found "+courant;
+                break;
+            case POUR_ERR:
+                messageErr+="expected pour  ==> found "+courant;
+                break;
+            case FINPOUR_ERR:
+                messageErr+="expected finpour  ==> found "+courant;
+                break;
+            case MOD_ERR:
+                messageErr+="expected mod  ==> found "+courant;
+                break;
+            case NUM_ERR:
+                messageErr+="expected nombre  ==> found "+courant;
+                break;
+            case PV_ERR:
+                messageErr+="expected ;  ==> found "+courant;
+                break;
+            case PLUS_ERR:
+                messageErr+="expected +  ==> found "+courant;
+                break;
+            case MOINS_ERR:
+                messageErr+="expected -  ==> found "+courant;
+                break;
+            case MULT_ERR:
+                messageErr+="expected *  ==> found "+courant;
+                break;
+            case DIV_ERR:
+                messageErr+="expected /  ==> found "+courant;
+                break;
+            case VIR_ERR:
+                messageErr+="expected ,  ==> found "+courant;
+                break;
+            case AFF_ERR:
+                messageErr+="expected :=  ==> found "+courant;
+                break;
+            case INF_ERR:
+                messageErr+="expected <  ==> found "+courant;
+                break;
+            case SUP_ERR:
+                messageErr+="expected >  ==> found "+courant;
+                break;
+            case INFEG_ERR:
+                messageErr+="expected <=  ==> found "+courant;
+                break;
+            case SUPEG_ERR:
+                messageErr+="expected >=  ==> found "+courant;
+                break;
+            case DIFF_ERR:
+                messageErr+="expected <>  ==> found "+courant;
+                break;
+            case PO_ERR:
+                messageErr+="expected (  ==> found "+courant;
+                break;
+            case PF_ERR:
+                messageErr+="expected )  ==> found "+courant;
+                break;
+            case EG_ERR:
+                messageErr+="expected =  ==> found "+courant;
+                break;
+            case CRO_ERR:
+                messageErr+="expected [  ==> found "+courant;
+                break;
+            case CRF_ERR:
+                messageErr+="expected ]  ==> found "+courant;
+                break;
+            case DEUX_POINTS_ERR:
+                messageErr+="expected :  ==> found "+courant;
+                break;
+            case CHAINE_CONSTANTE_ERR:
+                messageErr+="expected une chaine de caractère constante   ==> found "+courant;
+                break;
+            case CAR_CONSTANTE_ERR:
+                messageErr+="expected caractère  ==> found "+courant;
+                break;
+            case OU_ERR:
+                messageErr+="expected ou  ==> found "+courant;
+                break;
+            case ET_ERR:
+                messageErr+="expected et  ==> found "+courant;
+                break;
+            case NON_ERR:
+                messageErr+="expected non  ==> found "+courant;
+                break;
+            case FIN_CAS_ERR:
+                messageErr+="expected fincas  ==> found "+courant;
+                break;
+            case PROGRAM_ERR:
+                messageErr+="expected fonction or identifiant   ==> found "+courant;
+                break;
+            case PROGRAM2_ERR:
+                messageErr+="expected fonction or identifiant  ==> found "+courant;
+                break;
+            case EXTERNAL_DECLARATION_ERR:
+                messageErr+="expected fonction or identifiant  ==> found "+courant;
+                break;
+            case FUNCTION_DEFINITION_ERR:
+                messageErr+="expected fonction  ==> found "+courant;
+                break;
+            case PARAMETER_DECLARATION_ERR:
+                messageErr+="expected identifiant  ==> found "+courant;
+                break;
+            case PLUS_PARAMETRES_ERR:
+                messageErr+="expected ,  ==> found "+courant;
+                break;
+            case DECLARATION_ERR:
+                messageErr+="expected identifiant  ==> found "+courant;
+                break;
+            case DECLARATION2_ERR:
+                messageErr+="expected ; or :=  ==> found "+courant;
+                break;
+            case VALUE_ERR:
+                messageErr+="expected nombre or caractère or chaine de caractère or identifiant ==> found "+courant;
+                break;
+            case APPEL_FONCTION_ERR:
+                messageErr+="expected identifiant  ==> found "+courant;
+                break;
+            case ARGUMENT_LIST_ERR:
+                messageErr+="expected nombre or caractère or chaine de caractère or identifiant ==> found "+courant;
+                break;
+            case VALUE_EPSILON_ERR:
+                messageErr+="expected ,  ==> found "+courant;
+                break;
+            case COMPOUND_STATEMENT_ERR:
+                messageErr+="expected debut  ==> found "+courant;
+                break;
+            case EXPRESSION_STATEMENT_ERR:
+                messageErr+="expected ( or identifiant or nombre or caractère or chaine de caractère or identifiant   ==> found "+courant;
+                break;
+            case EXPRESSION_STATEMENT2_ERR:
+                messageErr+="expected : or := or [ or (  ==> found "+courant;
+                break;
+            case STATEMENT_ERR:
+                messageErr+="expected si or selon or tantque or pour or repeter or retourner or ( or identifiant or nombre or caractère or chaine de caractère or identifiant  ==> found "+courant;
+                break;
+            case CONDITIONAL_STATEMENT_ERR:
+                messageErr+="expected si or selon  ==> found "+courant;
+                break;
+            case SI_STATEMENT_ERR:
+                messageErr+="expected  si  ==> found "+courant;
+                break;
+            case SINONSTATEMENT_ERR:
+                messageErr+="expected sinon  ==> found "+courant;
+                break;
+            case SELON_STATEMENT_ERR:
+                messageErr+="expected selon  ==> found "+courant;
+                break;
+            case CASE_ERR:
+                messageErr+="expected entier  ==> found "+courant;
+                break;
+            case LOOP_STATEMENT_ERR:
+                messageErr+="expected tantque or pour or repeter  ==> found "+courant;
+                break;
+            case TANQUE_STATEMENT_ERR:
+                messageErr+="expected tantque  ==> found "+courant;
+                break;
+            case POUR_STATEMENT_ERR:
+                messageErr+="expected pour  ==> found "+courant;
+                break;
+            case REPETER_STATEMENT_ERR:
+                messageErr+="expected repeter  ==> found "+courant;
+                break;
+            case INITIALISATION_EXPRESSION_ERR:
+                messageErr+="expected identifiant   ==> found "+courant;
+                break;
+            case AUTRE_INITIALISATIONS_ERR:
+                messageErr+="expected ,  ==> found "+courant;
+                break;
+            case AFFECTATION_EXPRESSION_ERR:
+                messageErr+="expected identifiant  ==> found "+courant;
+                break;
+            case AFFECTATION_EXPRESSION2_ERR:
+                messageErr+="expected identifiant nombre or caractère or chaine de caractère  ==> found "+courant;
+                break;
+            case TEST_EXPRESSION_ERR:
+                messageErr+="expected non or ( or identifiant or nombre or caractère or chaine de caractère   ==> found "+courant;
+                break;
+            case MULTIPLICATIVE_EXPRESSION_ERR:
+                messageErr+="expected ( or nombre or caractère or chaine de caractère  or identifiant  ==> found "+courant;
+                break;
+            case POSTFIX_EXPRESSION_ERR:
+                messageErr+="expected ( or nombre or caractère or chaine de caractère  or identifiant  ==> found "+courant;
+                break;
+            case MULTIPLICATIVE_EXPRESSION2_ERR:
+                messageErr+="expected * or / or mod  ==> found "+courant;
+                break;
+            case ADDITIVE_EXPRESSION_ERR:
+                messageErr+="expected ( or nombre or caractère or chaine de caractère  or identifiant  ==> found "+courant;
+                break;
+            case LOGICAL_OU_EXPRESSION_ERR:
+                messageErr+="expected ( ou nombre or caractère or chaine de caractère  or identifiant  ==> found "+courant;
+                break;
+            case LOGICAL_OU_EXPRESSION2_ERR:
+                messageErr+="expected ou  ==> found "+courant;
+                break;
+            case LOGICAL_ET_EXPRESSION_ERR:
+                messageErr+="expected (  or nombre or caractère or chaine de caractère or identifiant  ==> found "+courant;
+                break;
+            case LOGICAL_ET_EXPRESSION2_ERR:
+                messageErr+="expected et  ==> found "+courant;
+                break;
+            case EQUALITY_EXPRESSION_ERR:
+                messageErr+="expected (  or nombre or caractère or chaine de caractère or identifiant  ==> found "+courant;
+                break;
+            case EQUALITY_EXPRESSION2_ERR:
+                messageErr+="expected <> or =  ==> found "+courant;
+                break;
+            case RELATIONAL_EXPRESSION_ERR:
+                messageErr+="expected (  or nombre or caractère or chaine de caractère or identifiant  ==> found "+courant;
+                break;
+            case RELATIONAL_EXPRESSION2_ERR:
+                messageErr+="expected < or > or <= or >=  ==> found "+courant;
+                break;
+            case TAB_DIM_MULT_ERR:
+                messageErr+="expected [  ==> found "+courant;
+                break;
+            case TAB_FACTOR_ERR:
+                messageErr+="expected [  ==> found "+courant;
+                break;
+            case RETURN_STATEMENT_ERR:
+                messageErr+="expected retourner  ==> found "+courant;
+                break;
+            case VAL_RETOURNER_ERR:
+                messageErr+="expected ( or identifiant or nombre or caractère or chaine de caractère  ==> found "+courant;
+                break;
+            case IDENTIFIER2_ERR:
+                messageErr+="expected [ or (  ==> found "+courant;
+                break;
+        }
+        return messageErr;
+    }
 
-    public void ERROR(String courant, ERR_SYNTAX ERR){
-      System.err.println(courant + " : "+ERR);
+    public void ERROR(String courant,ERR_SYNTAX ERR ){
+
+      String messageErr = "";
+      messageErr = getMessage(courant,ERR);
+      System.err.println("[Syntax Error]: "+messageErr);
       System.exit(-1);
     }
 
@@ -114,8 +408,6 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
     public void PROGRAM2() throws Exception{
      if(CODE_LEX_Cour==CODES_LEX.FONCTION_TOKEN || CODE_LEX_Cour == CODES_LEX.ID_TOKEN ){
       PROGRAM();
-     }else{
-         ERROR(courant, ERR_SYNTAX.PROGRAM2_ERR);
      }
     }
 
@@ -132,14 +424,19 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
 
     @Override
     public void FUNCTION_DEFINITION() throws Exception {
-      Test_Symbole(CODES_LEX.FONCTION_TOKEN,ERR_SYNTAX.FONCTION_ERR);
-      Test_Symbole(CODES_LEX.ID_TOKEN,ERR_SYNTAX.ID_ERR);
-      Test_Symbole(CODES_LEX.PO_TOKEN,ERR_SYNTAX.PO_ERR);
-      PARAMETER_DECLARATION();
-      Test_Symbole(CODES_LEX.PF_TOKEN,ERR_SYNTAX.PF_ERR);
-      Test_Symbole(CODES_LEX.DEUX_POINTS_TOKEN,ERR_SYNTAX.DEUX_POINTS_ERR);
-      TYPE_SPECIFIER();
-      COMPOUND_STATEMENT();
+        if(CODE_LEX_Cour==CODES_LEX.FONCTION_TOKEN){
+            Test_Symbole(CODES_LEX.FONCTION_TOKEN,ERR_SYNTAX.FONCTION_ERR);
+            Test_Symbole(CODES_LEX.ID_TOKEN,ERR_SYNTAX.ID_ERR);
+            Test_Symbole(CODES_LEX.PO_TOKEN,ERR_SYNTAX.PO_ERR);
+            PARAMETER_DECLARATION();
+            Test_Symbole(CODES_LEX.PF_TOKEN,ERR_SYNTAX.PF_ERR);
+            Test_Symbole(CODES_LEX.DEUX_POINTS_TOKEN,ERR_SYNTAX.DEUX_POINTS_ERR);
+            TYPE_SPECIFIER();
+            COMPOUND_STATEMENT();
+        }else{
+            ERROR(courant,ERR_SYNTAX.FUNCTION_DEFINITION_ERR);
+        }
+
     }
 
     @Override
@@ -153,9 +450,7 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
                 break;
             case PF_TOKEN: break;
             default: ERROR(courant, ERR_SYNTAX.PARAMETER_DECLARATION_ERR); break;
-
         }
-
     }
 
     @Override
@@ -167,17 +462,19 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
                 break;
             case PF_TOKEN: break;
             default: ERROR(courant, ERR_SYNTAX.PLUS_PARAMETRES_ERR); break;
-
         }
-
     }
 
     @Override
     public void DECLARATION() throws Exception {
-     Test_Symbole(CODES_LEX.ID_TOKEN,ERR_SYNTAX.ID_ERR);
-     Test_Symbole(CODES_LEX.DEUX_POINTS_TOKEN,ERR_SYNTAX.DEUX_POINTS_ERR);
-     TYPE_SPECIFIER();
-     DECLARATION2();
+        if(CODE_LEX_Cour==CODES_LEX.ID_TOKEN) {
+            Test_Symbole(CODES_LEX.ID_TOKEN, ERR_SYNTAX.ID_ERR);
+            Test_Symbole(CODES_LEX.DEUX_POINTS_TOKEN, ERR_SYNTAX.DEUX_POINTS_ERR);
+            TYPE_SPECIFIER();
+            DECLARATION2();
+        }else{
+            ERROR(courant,ERR_SYNTAX.DECLARATION_ERR);
+        }
     }
 
     @Override
@@ -221,7 +518,6 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
             default:
                 ERROR(courant, ERR_SYNTAX.APPEL_FONCTION_ERR);
                 break;
-
         }
 
     }
@@ -287,10 +583,13 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
 
     @Override
     public void COMPOUND_STATEMENT() throws Exception{
-
-       Test_Symbole(CODES_LEX.DEBUT_TOKEN,ERR_SYNTAX.DEBUT_ERR);
-       STATEMENT();
-       Test_Symbole(CODES_LEX.FIN_TOKEN,ERR_SYNTAX.FIN_ERR);
+       if(CODE_LEX_Cour == CODES_LEX.DEBUT_TOKEN){
+           Test_Symbole(CODES_LEX.DEBUT_TOKEN,ERR_SYNTAX.DEBUT_ERR);
+           STATEMENT();
+           Test_Symbole(CODES_LEX.FIN_TOKEN,ERR_SYNTAX.FIN_ERR);
+       }else{
+           ERROR(courant,ERR_SYNTAX.COMPOUND_STATEMENT_ERR);
+       }
     }
 
     @Override
@@ -401,14 +700,19 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
 
     @Override
     public void SI_STATEMENT() throws Exception{
-        Test_Symbole(CODES_LEX.SI_TOKEN,ERR_SYNTAX.SI_ERR);
-        Test_Symbole(CODES_LEX.PO_TOKEN,ERR_SYNTAX.PO_ERR);
-        TEST_EXPRESSION();
-        Test_Symbole(CODES_LEX.PF_TOKEN,ERR_SYNTAX.PF_ERR);
-        Test_Symbole(CODES_LEX.ALORS_TOKEN,ERR_SYNTAX.ALORS_ERR);
-        STATEMENT();
-        SINONSTATEMENT();
-        Test_Symbole(CODES_LEX.FINSI_TOKEN,ERR_SYNTAX.FINSI_ERR);
+        if(CODE_LEX_Cour==CODES_LEX.SI_TOKEN){
+            Test_Symbole(CODES_LEX.SI_TOKEN,ERR_SYNTAX.SI_ERR);
+            Test_Symbole(CODES_LEX.PO_TOKEN,ERR_SYNTAX.PO_ERR);
+            TEST_EXPRESSION();
+            Test_Symbole(CODES_LEX.PF_TOKEN,ERR_SYNTAX.PF_ERR);
+            Test_Symbole(CODES_LEX.ALORS_TOKEN,ERR_SYNTAX.ALORS_ERR);
+            STATEMENT();
+            SINONSTATEMENT();
+            Test_Symbole(CODES_LEX.FINSI_TOKEN,ERR_SYNTAX.FINSI_ERR);
+        }else{
+            ERROR(courant,ERR_SYNTAX.SI_STATEMENT_ERR);
+        }
+
     }
 
     @Override
@@ -426,14 +730,18 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
 
     @Override
     public void SELON_STATEMENT() throws Exception{
-      Test_Symbole(CODES_LEX.SELON_TOKEN,ERR_SYNTAX.SELON_ERR);
-      Test_Symbole(CODES_LEX.PO_TOKEN,ERR_SYNTAX.PO_ERR);
-      Test_Symbole(CODES_LEX.ID_TOKEN,ERR_SYNTAX.ID_ERR);
-      Test_Symbole(CODES_LEX.PF_TOKEN,ERR_SYNTAX.PF_ERR);
-      Test_Symbole(CODES_LEX.FAIRE_TOKEN,ERR_SYNTAX.FAIRE_ERR);
-      CASE();
-      SELON_FACTORI();
-      Test_Symbole(CODES_LEX.FINSELON_TOKEN,ERR_SYNTAX.FINSELON_ERR);
+        if(CODE_LEX_Cour==CODES_LEX.SELON_TOKEN){
+            Test_Symbole(CODES_LEX.SELON_TOKEN,ERR_SYNTAX.SELON_ERR);
+            Test_Symbole(CODES_LEX.PO_TOKEN,ERR_SYNTAX.PO_ERR);
+            Test_Symbole(CODES_LEX.ID_TOKEN,ERR_SYNTAX.ID_ERR);
+            Test_Symbole(CODES_LEX.PF_TOKEN,ERR_SYNTAX.PF_ERR);
+            Test_Symbole(CODES_LEX.FAIRE_TOKEN,ERR_SYNTAX.FAIRE_ERR);
+            CASE();
+            SELON_FACTORI();
+            Test_Symbole(CODES_LEX.FINSELON_TOKEN,ERR_SYNTAX.FINSELON_ERR);
+        }else{
+            ERROR(courant,ERR_SYNTAX.SELON_STATEMENT_ERR);
+        }
     }
 
     @Override
@@ -505,39 +813,53 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
 
     @Override
     public void TANQUE_STATEMENT()throws Exception {
-      Test_Symbole(CODES_LEX.TANT_QUE_TOKEN,ERR_SYNTAX.TANT_QUE_ERR);
-      Test_Symbole(CODES_LEX.PO_TOKEN,ERR_SYNTAX.PO_ERR);
-      TEST_EXPRESSION();
-      Test_Symbole(CODES_LEX.PF_TOKEN,ERR_SYNTAX.PF_ERR);
-      Test_Symbole(CODES_LEX.FAIRE_TOKEN,ERR_SYNTAX.FAIRE_ERR);
-      STATEMENT();
-      Test_Symbole(CODES_LEX.FINTQ_TOKEN,ERR_SYNTAX.FINTQ_ERR);
+        if(CODE_LEX_Cour==CODES_LEX.TANT_QUE_TOKEN){
+            Test_Symbole(CODES_LEX.TANT_QUE_TOKEN,ERR_SYNTAX.TANT_QUE_ERR);
+            Test_Symbole(CODES_LEX.PO_TOKEN,ERR_SYNTAX.PO_ERR);
+            TEST_EXPRESSION();
+            Test_Symbole(CODES_LEX.PF_TOKEN,ERR_SYNTAX.PF_ERR);
+            Test_Symbole(CODES_LEX.FAIRE_TOKEN,ERR_SYNTAX.FAIRE_ERR);
+            STATEMENT();
+            Test_Symbole(CODES_LEX.FINTQ_TOKEN,ERR_SYNTAX.FINTQ_ERR);
+        }else{
+            ERROR(courant,ERR_SYNTAX.TANQUE_STATEMENT_ERR);
+        }
+
     }
 
     @Override
     public void POUR_STATEMENT() throws Exception {
-     Test_Symbole(CODES_LEX.POUR_TOKEN,ERR_SYNTAX.POUR_ERR);
-     Test_Symbole(CODES_LEX.PO_TOKEN,ERR_SYNTAX.PO_ERR);
-     INITIALISATION_EXPRESSION();
-     Test_Symbole(CODES_LEX.PV_TOKEN,ERR_SYNTAX.PV_ERR);
-     TEST_EXPRESSION();
-     Test_Symbole(CODES_LEX.PV_TOKEN,ERR_SYNTAX.PV_ERR);
-     AFFECTATION_EXPRESSION();
-     Test_Symbole(CODES_LEX.PF_TOKEN,ERR_SYNTAX.PF_ERR);
-     Test_Symbole(CODES_LEX.FAIRE_TOKEN,ERR_SYNTAX.FAIRE_ERR);
-     STATEMENT();
-     Test_Symbole(CODES_LEX.FINPOUR_TOKEN,ERR_SYNTAX.FINPOUR_ERR);
+        if(CODE_LEX_Cour==CODES_LEX.POUR_TOKEN){
+            Test_Symbole(CODES_LEX.POUR_TOKEN,ERR_SYNTAX.POUR_ERR);
+            Test_Symbole(CODES_LEX.PO_TOKEN,ERR_SYNTAX.PO_ERR);
+            INITIALISATION_EXPRESSION();
+            Test_Symbole(CODES_LEX.PV_TOKEN,ERR_SYNTAX.PV_ERR);
+            TEST_EXPRESSION();
+            Test_Symbole(CODES_LEX.PV_TOKEN,ERR_SYNTAX.PV_ERR);
+            AFFECTATION_EXPRESSION();
+            Test_Symbole(CODES_LEX.PF_TOKEN,ERR_SYNTAX.PF_ERR);
+            Test_Symbole(CODES_LEX.FAIRE_TOKEN,ERR_SYNTAX.FAIRE_ERR);
+            STATEMENT();
+            Test_Symbole(CODES_LEX.FINPOUR_TOKEN,ERR_SYNTAX.FINPOUR_ERR);
+        }else{
+            ERROR(courant,ERR_SYNTAX.POUR_STATEMENT_ERR);
+        }
+
     }
 
     @Override
     public void REPETER_STATEMENT() throws Exception {
-        Test_Symbole(CODES_LEX.REPETER_TOKEN,ERR_SYNTAX.REPETER_ERR);
-        STATEMENT();
-        Test_Symbole(CODES_LEX.JUSQUA_TOKEN,ERR_SYNTAX.JUSQUA_ERR);
-        Test_Symbole(CODES_LEX.PO_TOKEN,ERR_SYNTAX.PO_ERR);
-        TEST_EXPRESSION();
-        Test_Symbole(CODES_LEX.PF_TOKEN,ERR_SYNTAX.PF_ERR);
-        Test_Symbole(CODES_LEX.PV_TOKEN,ERR_SYNTAX.PV_ERR);
+        if(CODE_LEX_Cour==CODES_LEX.REPETER_TOKEN){
+            Test_Symbole(CODES_LEX.REPETER_TOKEN,ERR_SYNTAX.REPETER_ERR);
+            STATEMENT();
+            Test_Symbole(CODES_LEX.JUSQUA_TOKEN,ERR_SYNTAX.JUSQUA_ERR);
+            Test_Symbole(CODES_LEX.PO_TOKEN,ERR_SYNTAX.PO_ERR);
+            TEST_EXPRESSION();
+            Test_Symbole(CODES_LEX.PF_TOKEN,ERR_SYNTAX.PF_ERR);
+            Test_Symbole(CODES_LEX.PV_TOKEN,ERR_SYNTAX.PV_ERR);
+        }else{
+            ERROR(courant,ERR_SYNTAX.REPETER_STATEMENT_ERR);
+        }
     }
 
     @Override
@@ -578,9 +900,14 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
 
     @Override
     public void AFFECTATION_EXPRESSION() throws Exception{
-      Test_Symbole(CODES_LEX.ID_TOKEN,ERR_SYNTAX.ID_ERR);
-      Test_Symbole(CODES_LEX.AFF_TOKEN,ERR_SYNTAX.AFF_ERR);
-      AFFECTATION_EXPRESSION2();
+        if(CODE_LEX_Cour==CODES_LEX.ID_TOKEN){
+            Test_Symbole(CODES_LEX.ID_TOKEN,ERR_SYNTAX.ID_ERR);
+            Test_Symbole(CODES_LEX.AFF_TOKEN,ERR_SYNTAX.AFF_ERR);
+            AFFECTATION_EXPRESSION2();
+        }else{
+            ERROR(courant,ERR_SYNTAX.AFFECTATION_EXPRESSION_ERR);
+        }
+
     }
 
     @Override
@@ -951,10 +1278,15 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
 
     @Override
     public void TAB_DIM_MULT() throws Exception{
-     Test_Symbole(CODES_LEX.CRO_TOKEN,ERR_SYNTAX.CRO_ERR);
-     ADDITIVE_EXPRESSION();
-     Test_Symbole(CODES_LEX.CRF_TOKEN,ERR_SYNTAX.CRF_ERR);
-     TAB_FACTOR();
+        if(CODE_LEX_Cour==CODES_LEX.CRO_TOKEN){
+            Test_Symbole(CODES_LEX.CRO_TOKEN,ERR_SYNTAX.CRO_ERR);
+            ADDITIVE_EXPRESSION();
+            Test_Symbole(CODES_LEX.CRF_TOKEN,ERR_SYNTAX.CRF_ERR);
+            TAB_FACTOR();
+        }else{
+            ERROR(courant,ERR_SYNTAX.TAB_DIM_MULT_ERR);
+        }
+
     }
 
     @Override
@@ -989,9 +1321,14 @@ public class AnalyseurSyntaxique implements SyntaxInterface{
 
     @Override
     public void RETURN_STATEMENT() throws Exception{
-      Test_Symbole(CODES_LEX.RETOURNER_TOKEN,ERR_SYNTAX.RETOURNER_ERR);
-      VAL_RETOURNER();
-      Test_Symbole(CODES_LEX.PV_TOKEN,ERR_SYNTAX.PV_ERR);
+        if(CODE_LEX_Cour==CODES_LEX.RETOURNER_TOKEN){
+            Test_Symbole(CODES_LEX.RETOURNER_TOKEN,ERR_SYNTAX.RETOURNER_ERR);
+            VAL_RETOURNER();
+            Test_Symbole(CODES_LEX.PV_TOKEN,ERR_SYNTAX.PV_ERR);
+        }else{
+            ERROR(courant,ERR_SYNTAX.RETURN_STATEMENT_ERR);
+        }
+
     }
 
     @Override
